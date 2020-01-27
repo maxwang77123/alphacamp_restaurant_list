@@ -13,19 +13,26 @@ app.use(express.static('public'))
 
 // routes setting
 app.get('/', (req, res) => {
-  res.render('index', { shopList: restaurantList.results })
+  res.render('index', { shops: restaurantList.results })
 })
 
 
 //直接在畫面上點選圖片
-app.get('/restaurants/:shopList', (req, res) => {
-  const SoleRestaurant = restaurantList.results.filter(
-    function (item) {
-      return item.id == req.params.shopList
-    })
-  res.render('show', { shopList: SoleRestaurant })
+app.get('/restaurants/:shopID', (req, res) => {
+  const shop = restaurantList.results.find
+    (shop => shop.id.toString() === req.params.shopID)
+  res.render('show', { shop: shop })
 })
 
+
+//search功能
+app.get('/search', (req, res) => {
+  const keyword = req.query.keyword
+  const shops = restaurantList.results.filter(shop => {
+    return shop.name.toLowerCase().includes(keyword.toLowerCase())
+  })
+  res.render('index', { shops: shops })
+})
 
 
 
